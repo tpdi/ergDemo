@@ -1,7 +1,8 @@
 package org.diffenbach.enumradiogroup;
 
-import org.diffenbach.enumradiogroup.EnumRadioGroup.DisplayPredicate;
-import org.diffenbach.enumradiogroup.EnumRadioGroup.OnCheckChangedListener;
+import org.diffenbach.android.widgets.EnumRadioGroup;
+import org.diffenbach.android.widgets.EnumRadioGroup.DisplayPredicate;
+import org.diffenbach.android.widgets.EnumRadioGroup.OnCheckChangedListener;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
-	enum Agreed {NO, YES, MAYBE}
+	public enum Agreed {NO, YES, MAYBE}
 	enum Pie {APPLE, CHERRY, POTATO}
 	enum Sex {REQUIRED_FIELD, FEMALE, MALE}
 	enum Pet {NONE, CAT, DOG, BOTH} 
@@ -53,7 +54,7 @@ public class MainActivity extends Activity {
 						 this,							// context
 						 Pie.POTATO,                    // the default button we clear to
 						 R.array.pie, 					// a list of localized names for the buttons
-						 R.layout.horizontal_wrapped_radio_button) // the button layout
+						 org.diffenbach.android.widgets.R.layout.horizontal_radio_button) // the button layout
 						 
 						 // Since filter returns this, we can (essentially) filter at creation,
 						 // before we assign to a variable.
@@ -67,28 +68,40 @@ public class MainActivity extends Activity {
 		
 		// all the comments make it look too complicated, so let me show it again:
 		
-		pets = new EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, R.layout.horizontal_wrapped_radio_button);
+		pets = new EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, 
+				org.diffenbach.android.widgets.R.layout.wrapped_radio_button);
 		pets.setOrientation(LinearLayout.HORIZONTAL);
 		addViewToWrapper(R.id.pets, pets);
 		
+	
 		
 		// See the setUpRadioGroupCallback for setting up callbacks.
 		// EnumRadioGroup.findById is a somewhat typesafe way to get an EnumRadioGroup.
-		setUpRadioGroupCallback(EnumRadioGroup.findById(this, R.id.agreed1), R.id.agreed1_text);
-		setUpRadioGroupCallback(EnumRadioGroup.findById(this, R.id.sex), R.id.sex_text);
+		// note that we *must* specify the type parameter in the call to findById
+		// the funny looking  "EnumRadioGroup.<Sex> findById"
+		// only because the call to setUpRadioGroupCallback needs it.
+		// alternatively, we can do this:
+		EnumRadioGroup<Agreed> agreed = EnumRadioGroup.findById(this, R.id.agreed1);
+		setUpRadioGroupCallback( agreed, R.id.agreed1_text);
+		
+		// setUpRadioGroupCallback needs the actual type because it news up a generic callback. 
+		
+		//setUpRadioGroupCallback(EnumRadioGroup.<Agreed>findById(this, R.id.agreed1), R.id.agreed1_text);
+		setUpRadioGroupCallback(EnumRadioGroup.<Sex> findById( this, R.id.sex), R.id.sex_text);
 		setUpRadioGroupCallback(programmaticAgreeds, R.id.p_agreed_text);
 		setUpRadioGroupCallback(programmaticPies, R.id.p_pies_text);
 		
 		
 		// we can make, keep, and reuse references to typed filters 
-		// that take the Enum class or Enum constants
+		// that take the Enum class, EnumSets, or Enum constants
 		pieFilters = EnumRadioGroup.makeDisplayPredicateArray(
 				EnumRadioGroup.includeAll(Pie.class),
+				EnumRadioGroup.include(Pie.APPLE, Pie.CHERRY),
 				EnumRadioGroup.includeAllBut(Pie.APPLE),
 				EnumRadioGroup.includeAllBut(Pie.APPLE, Pie.CHERRY)
-				); 
+				);  
 		
-		// As filers are typed, this won't work:
+		// As filers are typed, this correctly won't work:
 		// programmaticAgreeds.filter(pieFilters[0]);
 		// Neither will this:
 		// programmaticAgreeds.filter(EnumRadioGroup.includeAll(Pie.class));
@@ -101,9 +114,13 @@ public class MainActivity extends Activity {
 		
 	}
 	
+
+
+	
+	
 	// This is a generic method, so it properly handles EnumRadioGroups 
-	// parameterized on any Enum type.
-	// Adding the <T extends Enum<T>> is the price you pay for type safety.
+	// parameterized on any Enum type. Adding the <T extends Enum<T>> is 
+	// the price you pay for calling new OnCheckChangedListener<T> in the method.
 	private <T extends Enum<T>> void setUpRadioGroupCallback( EnumRadioGroup<T> erg, final int textViewid) {
 		erg.setOnCheckedChangeListener( new OnCheckChangedListener<T>() {
 
@@ -162,7 +179,7 @@ public class MainActivity extends Activity {
 	
 	// Button callback
 	public void changeFilter(View v) {
-		// we can filter a group after its created
+		// we can filter a group after it's created
 		pieFilterOffset = (pieFilterOffset + 1) % pieFilters.length;
 		EnumRadioGroup.DisplayPredicate<Pie> predicate = pieFilters[pieFilterOffset];
 		((TextView) findViewById(R.id.p_pies_includes)).setText(predicate.toString());
