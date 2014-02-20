@@ -1,5 +1,8 @@
 package org.diffenbach.enumradiogroup;
 
+import static org.diffenbach.android.utils.ViewUtils.setId;
+import static org.diffenbach.android.utils.ViewUtils.setOrientation;
+
 import org.diffenbach.android.widgets.EnumRadioGroup;
 import org.diffenbach.android.widgets.EnumRadioGroup.DisplayPredicate;
 import org.diffenbach.android.widgets.EnumRadioGroup.OnCheckChangedListener;
@@ -16,9 +19,15 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 	
 	public enum Agreed {NO, YES, MAYBE}
-	enum Pie {APPLE, CHERRY, POTATO}
-	enum Sex {REQUIRED_FIELD, FEMALE, MALE}
-	enum Pet {NONE, CAT, DOG, BOTH} 
+	public enum Pie {APPLE, CHERRY, POTATO}
+	public enum Sex {REQUIRED_FIELD, FEMALE, MALE}
+	public enum Pet {NONE, CAT, DOG, BOTH} 
+	
+	// these Ids are only to enable the Robotium tests to easily find the views
+	// they are unnecessary for anything else.
+	public static final int P_AGREED_ID = 1;
+	public static final int P_PIES_ID = 2;
+	public static final int P_PETS_ID = 3;
 	
 	EnumRadioGroup<Agreed> programmaticAgreeds;
 	EnumRadioGroup<Pie> programmaticPies;
@@ -54,7 +63,7 @@ public class MainActivity extends Activity {
 						 this,							// context
 						 Pie.POTATO,                    // the default button we clear to
 						 R.array.pie, 					// a list of localized names for the buttons
-						 org.diffenbach.android.widgets.R.layout.horizontal_radio_button) // the button layout
+						 org.diffenbach.android.widgets.R.layout.wrapped_radio_button) // the button layout
 						 
 						 // Since filter returns this, we can (essentially) filter at creation,
 						 // before we assign to a variable.
@@ -62,16 +71,20 @@ public class MainActivity extends Activity {
 				); 
 		
 		
+		setId(P_AGREED_ID, programmaticAgreeds);
 		// and then set the EnumRadioGroup's orientation match the layout.
-		programmaticPies.setOrientation(LinearLayout.HORIZONTAL);
+		setId(P_PIES_ID, programmaticPies).setOrientation(LinearLayout.HORIZONTAL);
+		
 		
 		
 		// all the comments make it look too complicated, so let me show it again:
 		
-		pets = new EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, 
-				org.diffenbach.android.widgets.R.layout.wrapped_radio_button);
-		pets.setOrientation(LinearLayout.HORIZONTAL);
-		addViewToWrapper(R.id.pets, pets);
+		pets = 	new EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, 
+						org.diffenbach.android.widgets.R.layout.wrapped_radio_button);
+		
+		
+		//pets.setOrientation(LinearLayout.HORIZONTAL);
+		addViewToWrapper(R.id.pets, setOrientation(LinearLayout.HORIZONTAL, setId(P_PETS_ID, pets)));
 		
 	
 		

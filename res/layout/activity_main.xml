@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity" xmlns:app="http://schemas.android.com/apk/res/org.diffenbach.enumradiogroup">
 
     <ScrollView
         android:id="@+id/scrollview"
@@ -62,6 +62,7 @@
                         android:orientation="horizontal"
                         tpd:enumClassName="org.diffenbach.enumradiogroup.MainActivity$Agreed"
                         tpd:enumDefaultValueString="NO"
+                        tpd:radioButtonLayout="@layout/myhorizontal_radio_button"
                         />
                     <!-- we neglected to include the names array, so we we see the Enum's toString -->
                     <!-- notice the class name: Java standard is that inner classes are -->
@@ -90,8 +91,9 @@
                         tpd:enumClassName="org.diffenbach.enumradiogroup.MainActivity$Sex"
                         tpd:enumDefaultIsShown="false"
                         tpd:enumDefaultValueString="REQUIRED_FIELD"
-                        tpd:radioButtonNames="@array/sex">
-                        <!-- tpdi:radioButtonLayout="@tpdi:layout/wrapped_radio_button"-->
+                        tpd:radioButtonNames="@array/sex"
+                        
+                        >
                          
 
                         <!-- we used all our attributes, and we made the default unshown -->
@@ -109,51 +111,44 @@
                             android:text="@string/sexlabel" />
 
                         <!-- they will all go before the Enum Radio buttons -->
-                        <!-- unless they're after a dummy RadioButton: its tag must be DUMMY. -->
-                        <!-- Anything after the first dummy RadioButton -->
+                        <!-- unless they're after a RadioButton. -->
+                        <!-- Anything after the first RadioButton -->
                         <!-- will go after the Enum RadioButtons -->
-                        <!-- and all dummy RadioButtons will be removed. -->
+                        <!-- and all RadioButtons children in the XML will be removed. -->
 
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:tag="DUMMY"
                             android:text="DUMMY" />
 
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:tag="DUMMY"
                             android:text="DUMMY2" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:text="After" />
+                            android:layout_marginLeft="6dp"
+                            android:text="Not removed" />
 
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:tag="DUMMY"
                             android:text="DUMMY3" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:text="After2" />
+                            android:layout_marginLeft="2dp"
+                            android:text="after" />
 
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:tag="DUMMY"
                             android:text="DUMMY3" />
-                    </org.diffenbach.android.widgets.EnumRadioGroup> 
+
+</org.diffenbach.android.widgets.EnumRadioGroup> 
 
                     <TextView
                         android:id="@+id/sex_text"
