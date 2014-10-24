@@ -8,6 +8,7 @@ import org.diffenbach.android.widgets.multilistener.EnumRadioGroup;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -22,7 +23,7 @@ public class MainActivity extends Activity {
 	
 	public enum Agreed {NO, YES, MAYBE}
 	public enum Pie {APPLE, CHERRY, POTATO}
-	public enum Sex {REQUIRED_FIELD, FEMALE, MALE}
+	public enum Sex {REQUIRED, FEMALE, MALE}
 	public enum Pet {NONE, CAT, DOG, BOTH} 
 	
 	// these Ids are only to enable the Robotium tests to easily find the views
@@ -47,7 +48,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		addViewToWrapper(R.id.p_agreed_wrapper, programmaticAgreeds = 
+		addViewToWrapper(R.id.p_agreed_wrapper, 0, programmaticAgreeds = 
 				// Add a view with a string array that filters what RadioButtons are visible;
 				// a layout for the RadioButtons will be selected based on the
 				// orientation of the EnumRadioGroup.
@@ -62,7 +63,7 @@ public class MainActivity extends Activity {
 						Agreed.NO, 						// the default button we clear to
 						R.array.agreed_without_no));	// a list of localized names for the buttons
 		
-		addViewToWrapper(R.id.p_pies_wrapper, programmaticPies =
+		addViewToWrapper(R.id.p_pies_wrapper, 0, programmaticPies =
 				// or add a layout id for the RadioButtons
 				 new EnumRadioGroup<Pie>(
 						 this,							// context
@@ -89,7 +90,7 @@ public class MainActivity extends Activity {
 		
 		
 		//pets.setOrientation(LinearLayout.HORIZONTAL);
-		addViewToWrapper(R.id.pets, setOrientation(LinearLayout.HORIZONTAL, setId(P_PETS_ID, pets)));
+		addViewToWrapper(R.id.pets, 1, setOrientation(LinearLayout.HORIZONTAL, setId(P_PETS_ID, pets)));
 		
 	
 		
@@ -122,7 +123,7 @@ public class MainActivity extends Activity {
 				EnumRadioGroup.includeAllBut(Pie.APPLE, Pie.CHERRY)
 				);  
 		
-		// As filers are typed, this correctly won't work:
+		// As filters are typed, so this correctly won't work:
 		// programmaticAgreeds.filter(pieFilters[0]);
 		// Neither will this:
 		// programmaticAgreeds.filter(EnumRadioGroup.includeAll(Pie.class));
@@ -130,6 +131,8 @@ public class MainActivity extends Activity {
 		// programmaticAgreeds.filter(EnumRadioGroup.includeAllBut(Pie.APPLE));
 		
 		TextView pieLabel = new TextView(this); // notice it has no padding, unlike the XML Views
+		int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+		pieLabel.setPadding(px, px, px/2, px);
 		pieLabel.setText(R.string.pielabel); 
 		programmaticPies.addView(pieLabel, 0);
 		
@@ -218,9 +221,9 @@ public class MainActivity extends Activity {
 	}
 
 	// just a convenience function, to insert a programmatic EnumRadioGroup
-	private void addViewToWrapper( int parentId, View child) {
+	private void addViewToWrapper( int parentId, int index, View child) {
 		ViewGroup parent = (ViewGroup) findViewById(parentId);
-		parent.addView(child, 0);
+		parent.addView(child, index);
 	}
 	
 
