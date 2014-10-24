@@ -190,21 +190,22 @@ public class MainActivity extends Activity {
 		// You can clear it as a RadioGroup, calling the overridden clearCheck:
 		((RadioGroup) findViewById(R.id.agreed1)).clearCheck();
 		
-		// Or you an get it with the type-inferring function, EnumRadioGroup.findById
+		// Or you can get it with the type-inferring function, EnumRadioGroup.findById
 		// and clear it using the overridden RadioGroup method:
 		EnumRadioGroup.findById(this, R.id.sex).check(-1);
 		
-		//Preferably, you'd use the type inferring function and clearCheck:
+		// But preferably, you'd use the type inferring function and clearCheck
+		// to reset the group to the default:
 		EnumRadioGroup.findById(this, R.id.sex).clearCheck();
 		
 		// Or you can set it to any enum constant of its enum type;
 		// set it with an enum value, and type-safety
-		// means you can't set it to the a non-existing value.
+		// means you can't set it to any non-existing value.
 		programmaticAgreeds.check(Agreed.NO);
 		
 		// And you can get it as a value too:
 		Pie selected = programmaticPies.getCheckedValue();
-		// for efficiency, we should put Pie.values() in a local, but...
+		// (for efficiency, we should put Pie.values() in a local, but...)
 		Pie next = Pie.values()[ (selected.ordinal() + 1) % Pie.values().length];
 		programmaticPies.check(next);
 		
