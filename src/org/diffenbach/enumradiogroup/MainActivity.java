@@ -111,7 +111,7 @@ public class MainActivity extends Activity {
 		setUpRadioGroupCallback(EnumRadioGroup.<org.diffenbach.android.widgets.EnumRadioGroup<Sex>> findById( this, R.id.sex), R.id.sex_text);
 		setUpRadioGroupCallback(programmaticAgreeds, R.id.p_agreed_text);
 		setUpRadioGroupCallback(programmaticPies, R.id.p_pies_text);
-		setUpRadioGroupCallback(pets, R.id.p_pies_text);
+		setUpRadioGroupCallback(pets, R.id.p_pets_text);
 		
 		// we can make, keep, and reuse references to typed filters 
 		// that take the Enum class, EnumSets, or Enum constants
