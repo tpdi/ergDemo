@@ -3,9 +3,8 @@ package org.diffenbach.enumradiogroup;
 import static org.diffenbach.android.utils.ViewUtils.setId;
 import static org.diffenbach.android.utils.ViewUtils.setOrientation;
 
-import org.diffenbach.android.widgets.EnumRadioGroup;
 import org.diffenbach.android.widgets.EnumRadioGroup.DisplayPredicate;
-import org.diffenbach.android.widgets.EnumRadioGroup.OnCheckChangedListener;
+import org.diffenbach.android.widgets.multilistener.EnumRadioGroup;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,6 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+//import android.widget.LinearLayout;
+// for most EnumRadioGroups in this file, we'll be using multilisteners
+// so we've imported that class and will fully qualify any single listeners
 
 public class MainActivity extends Activity {
 	
@@ -29,9 +31,12 @@ public class MainActivity extends Activity {
 	public static final int P_PIES_ID = 2;
 	public static final int P_PETS_ID = 3;
 	
+	// this references are to the EnumRadioGroup type imported above
 	EnumRadioGroup<Agreed> programmaticAgreeds;
-	EnumRadioGroup<Pie> programmaticPies;
-	EnumRadioGroup<Pet> pets;
+	// this reference is explicitly to the multi-listener type
+	org.diffenbach.android.widgets.multilistener.EnumRadioGroup<Pie> programmaticPies;
+	// this reference is explicitly to the single-listener type
+	org.diffenbach.android.widgets.EnumRadioGroup<Pet> pets;
 	
 	DisplayPredicate<Pie>[] pieFilters;
 	int pieFilterOffset = 1;
@@ -79,8 +84,8 @@ public class MainActivity extends Activity {
 		
 		// all the comments make it look too complicated, so let me show it again:
 		
-		pets = 	new EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, 
-						org.diffenbach.android.widgets.R.layout.wrapped_radio_button);
+		pets = 	new org.diffenbach.android.widgets.EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, 
+						R.layout.wrapped_radio_button);
 		
 		
 		//pets.setOrientation(LinearLayout.HORIZONTAL);
@@ -91,19 +96,22 @@ public class MainActivity extends Activity {
 		// See the setUpRadioGroupCallback for setting up callbacks.
 		// EnumRadioGroup.findById is a somewhat typesafe way to get an EnumRadioGroup.
 		// note that we *must* specify the type parameter in the call to findById
-		// the funny looking  "EnumRadioGroup.<Sex> findById"
+		// either explicitly, by assigning to a type, or explicitly.
+		// The funny looking  "EnumRadioGroup.<Sex> findById" sets it explicitly
 		// only because the call to setUpRadioGroupCallback needs it.
-		// alternatively, we can do this:
-		EnumRadioGroup<Agreed> agreed = EnumRadioGroup.findById(this, R.id.agreed1);
+		// alternatively, we can do this: 
+		
+		org.diffenbach.android.widgets.EnumRadioGroup<Agreed> agreed 
+			= EnumRadioGroup.findById(this, R.id.agreed1);
 		setUpRadioGroupCallback( agreed, R.id.agreed1_text);
 		
 		// setUpRadioGroupCallback needs the actual type because it news up a generic callback. 
 		
 		//setUpRadioGroupCallback(EnumRadioGroup.<Agreed>findById(this, R.id.agreed1), R.id.agreed1_text);
-		setUpRadioGroupCallback(EnumRadioGroup.<Sex> findById( this, R.id.sex), R.id.sex_text);
+		setUpRadioGroupCallback(EnumRadioGroup.<org.diffenbach.android.widgets.EnumRadioGroup<Sex>> findById( this, R.id.sex), R.id.sex_text);
 		setUpRadioGroupCallback(programmaticAgreeds, R.id.p_agreed_text);
 		setUpRadioGroupCallback(programmaticPies, R.id.p_pies_text);
-		
+		setUpRadioGroupCallback(pets, R.id.p_pies_text);
 		
 		// we can make, keep, and reuse references to typed filters 
 		// that take the Enum class, EnumSets, or Enum constants
@@ -126,19 +134,29 @@ public class MainActivity extends Activity {
 		programmaticPies.addView(pieLabel, 0);
 		
 	}
-	
 
-
-	
-	
 	// This is a generic method, so it properly handles EnumRadioGroups 
 	// parameterized on any Enum type. Adding the <T extends Enum<T>> is 
 	// the price you pay for calling new OnCheckChangedListener<T> in the method.
-	private <T extends Enum<T>> void setUpRadioGroupCallback( EnumRadioGroup<T> erg, final int textViewid) {
-		erg.setOnCheckedChangeListener( new OnCheckChangedListener<T>() {
+	
+	// If, as this example, you've imported the multi-listener type 
+	// org.diffenbach.android.widgets.multilistener.EnumRadioGroup<T>
+	// you may also want methods to take the (single listener) base type
+	// in that case, as the multi- and single-listener types have the same unqualified name
+	// you need to fully qualify the name of the single-listener type:
+	// org.diffenbach.android.widgets.EnumRadioGroup<T>
+	private <T extends Enum<T>> void setUpRadioGroupCallback( org.diffenbach.android.widgets.EnumRadioGroup<T> erg, final int textViewid) {
+		erg.setOnCheckedChangeListener( new EnumRadioGroup.OnCheckedChangeListener<T>() {
 
+			// Please note that even for multi-listener, the type of the EnumRadioGroup
+			// passed back to the listener is always the  base single listener type
+			// (org.diffenbach.android.widgets.EnumRadioGroup).
+			// This allows the same listener to be freely used with both single and multi types,
+			// at the cost of removing (safe) access to the add/set multi listener methods.
+			// It seems reasonable that you're not likely going to want to add a listener
+			// in a listener callback (though you infrequently  might want to replace it).
 			@Override
-			public void onCheckedChanged(EnumRadioGroup<T> group, T currentValue, int checkedId) {
+			public void onCheckedChanged(org.diffenbach.android.widgets.EnumRadioGroup<T> group, T currentValue, int checkedId) {
 				
 				// we're given the current value, for most things that's all we'll need
 				String currentValueName = currentValue.toString() ;
