@@ -114,7 +114,7 @@ public class MainActivity extends Activity {
 		setUpRadioGroupCallback(programmaticPies, R.id.p_pies_text);
 		setUpRadioGroupCallback(pets, R.id.p_pets_text);
 		
-		// we can make, keep, and reuse references to typed filters 
+		// we can make, keep, and reuse references to strongly typed filters 
 		// that take the Enum class, EnumSets, or Enum constants
 		pieFilters = EnumRadioGroup.makeDisplayPredicateArray(
 				EnumRadioGroup.includeAll(Pie.class),
@@ -203,6 +203,9 @@ public class MainActivity extends Activity {
 		// means you can't set it to any non-existing value.
 		programmaticAgreeds.check(Agreed.NO);
 		
+		// so this correctly won't work
+		//programmaticAgreeds.check(Sex.FEMALE);
+		
 		// And you can get it as a value too:
 		Pie selected = programmaticPies.getCheckedValue();
 		// (for efficiency, we should put Pie.values() in a local, but...)
@@ -217,12 +220,14 @@ public class MainActivity extends Activity {
 		// we can filter a group after it's created
 		pieFilterOffset = (pieFilterOffset + 1) % pieFilters.length;
 		EnumRadioGroup.DisplayPredicate<Pie> predicate = pieFilters[pieFilterOffset];
+		// calling toString on a predicate gives its English description
 		((TextView) findViewById(R.id.p_pies_includes)).setText(predicate.toString());
 		programmaticPies.filter(predicate);
 	}
 
 	// just a convenience function, to insert a programmatic EnumRadioGroup
-	private void addViewToWrapper( int parentId, int index, View child) {
+	// in its parent widget
+	private void addViewToWrapper(int parentId, int index, View child) {
 		ViewGroup parent = (ViewGroup) findViewById(parentId);
 		parent.addView(child, index);
 	}
