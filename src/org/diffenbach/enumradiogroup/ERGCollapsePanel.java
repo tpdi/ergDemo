@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public class CollapsePanel<T extends Enum<T>> extends LinearLayout implements Collapsable {
+public class ERGCollapsePanel<T extends Enum<T>> extends LinearLayout implements Collapsable {
 
 	private TextTwoUp makeQuestion(Context context, String question) {
 		TextTwoUp ret = new TextTwoUp(context);
@@ -26,7 +26,7 @@ public class CollapsePanel<T extends Enum<T>> extends LinearLayout implements Co
 	private final EnumRadioGroup<T> body;
 	private final Collapsable next;
 
-	public CollapsePanel(Context context, String pquestion, EnumRadioGroup<T> answers, 
+	public ERGCollapsePanel(Context context, String pquestion, EnumRadioGroup<T> answers, 
 			Collapsable pnext) {
 		super(context);
 		setOrientation(LinearLayout.VERTICAL);
@@ -56,7 +56,7 @@ public class CollapsePanel<T extends Enum<T>> extends LinearLayout implements Co
 		return body;
 	}
 	
-	public CollapsePanel<T> collapse(boolean collapsed) {
+	public ERGCollapsePanel<T> collapse(boolean collapsed) {
 		setVisibility(View.VISIBLE);
 		body.setVisibility(collapsed? View.GONE : View.VISIBLE);
 		return this;
@@ -70,7 +70,7 @@ public class CollapsePanel<T extends Enum<T>> extends LinearLayout implements Co
 		return body.getCheckedValue();
 	}
 	
-	public CollapsePanel<T> setValue(T value) {
+	public ERGCollapsePanel<T> setValue(T value) {
 		body.check(value);
 		return this;
 	}

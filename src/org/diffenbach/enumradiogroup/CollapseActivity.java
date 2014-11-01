@@ -46,21 +46,21 @@ public class CollapseActivity extends Activity {
 		
 		
 		 
-		CollapsePanel<Agreed> cp = 
-			new CollapsePanel<Agreed>(this, "Do you agree?", 
+		ERGCollapsePanel<Agreed> cp = 
+			new ERGCollapsePanel<Agreed>(this, "Do you agree?", 
 				new EnumRadioGroup<Agreed>(
 						this, 							
 						Agreed.NO, 						
 						R.array.agreed_without_no),
 		
-			new CollapsePanel<Pie>(this, "What pie is your favorite", 
+			new ERGCollapsePanel<Pie>(this, "What pie is your favorite", 
 				 new EnumRadioGroup<Pie>(
 						 this,							// context
 						 Pie.POTATO,                    // the default button we clear to
 						 R.array.pie, 					// a list of localized names for the buttons
 						 org.diffenbach.android.widgets.R.layout.wrapped_radio_button),
 			
-			new CollapsePanel<Pet>(this, "What kind of pets do you have", 
+			new ERGCollapsePanel<Pet>(this, "What kind of pets do you have", 
 				new EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, 
 							R.layout.wrapped_radio_button),
 			null)));
