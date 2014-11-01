@@ -6,31 +6,29 @@ import org.diffenbach.android.widgets.EnumRadioGroup.OnCheckedChangeListener;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class CollapsePanel<T extends Enum<T>> extends LinearLayout implements Collapsable {
 
-	private Button makeQuestion(Context context, String question) {
-		Button ret = new Button(context);
-		ret.setText(question);
+	private TextTwoUp makeQuestion(Context context, String question) {
+		TextTwoUp ret = new TextTwoUp(context);
+		ret.getFirst().setText(question);
 		ret.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				collapse(false);
+				collapse(! isCollapsed());
 			}
 		});
 		return ret;
 	}
-	private final String question;
-	private final Button head;
+
+	private final TextTwoUp head;
 	private final EnumRadioGroup<T> body;
 	private final Collapsable next;
 
 	public CollapsePanel(Context context, String pquestion, EnumRadioGroup<T> answers, 
 			Collapsable pnext) {
 		super(context);
-		this.question = pquestion;
 		setOrientation(LinearLayout.VERTICAL);
 		addView(head = makeQuestion(context, pquestion));
 		addView(body = answers);
@@ -40,16 +38,17 @@ public class CollapsePanel<T extends Enum<T>> extends LinearLayout implements Co
 			@Override
 			public void onCheckedChanged(EnumRadioGroup<T> group,
 					T currentValue, int checkedId) {
-				head.setText(question + "  " + group.findViewByEnum(currentValue).getText());
+				head.getSecond().setText(group.findViewByEnum(currentValue).getText());
 				collapse(true);
 				if (next != null) next.collapse(false);
 			}
 		});
 		collapse(true);
+		setVisibility(View.GONE);
 
 	}
 
-	public Button getHead() {
+	public TextTwoUp getHead() {
 		return head;
 	}
 
@@ -58,8 +57,13 @@ public class CollapsePanel<T extends Enum<T>> extends LinearLayout implements Co
 	}
 	
 	public CollapsePanel<T> collapse(boolean collapsed) {
+		setVisibility(View.VISIBLE);
 		body.setVisibility(collapsed? View.GONE : View.VISIBLE);
 		return this;
+	}
+	
+	public boolean isCollapsed() {
+		return body.getVisibility() != View.VISIBLE;
 	}
 	
 	public Enum<T> getValue() {
