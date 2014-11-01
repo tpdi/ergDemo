@@ -7,6 +7,7 @@ import org.diffenbach.android.widgets.EnumRadioGroup.DisplayPredicate;
 import org.diffenbach.android.widgets.multilistener.EnumRadioGroup;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -213,6 +214,8 @@ public class MainActivity extends Activity {
 		programmaticPies.check(next);
 		
 		pets.clearCheck();
+		pets.findViewByEnum(Pet.NONE).setEnabled(! pets.findViewByEnum(Pet.NONE).isEnabled());
+		pets.findViewByEnum(Pet.DOG).setTextColor(pets.findViewByEnum(Pet.DOG).getTextColors().getDefaultColor() == Color.RED ? Color.BLACK : Color.RED);
 	}
 	
 	// Button callback
