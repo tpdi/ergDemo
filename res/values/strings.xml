@@ -36,5 +36,11 @@
         <item >Dogs(s)</item>
         <item >Both</item>
     </string-array>
+    
+    <string-array name="noyes">
+        <item >Unknown</item>
+        <item >No</item>
+        <item >Yes</item>
+    </string-array>
 
 </resources>

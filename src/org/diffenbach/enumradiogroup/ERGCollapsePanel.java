@@ -6,6 +6,7 @@ import org.diffenbach.android.widgets.EnumRadioGroup.OnCheckedChangeListener;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class ERGCollapsePanel<T extends Enum<T>> extends LinearLayout implements Collapsable {
@@ -26,10 +27,14 @@ public class ERGCollapsePanel<T extends Enum<T>> extends LinearLayout implements
 	private final EnumRadioGroup<T> body;
 	private final Collapsable next;
 
+
 	public ERGCollapsePanel(Context context, String pquestion, EnumRadioGroup<T> answers, 
 			Collapsable pnext) {
 		super(context);
 		setOrientation(LinearLayout.VERTICAL);
+		//collapse(true);
+		setVisibility(View.GONE);
+		
 		addView(head = makeQuestion(context, pquestion));
 		addView(body = answers);
 		this.next = pnext;
@@ -40,14 +45,12 @@ public class ERGCollapsePanel<T extends Enum<T>> extends LinearLayout implements
 					T currentValue, int checkedId) {
 				head.getSecond().setText(group.findViewByEnum(currentValue).getText());
 				collapse(true);
-				if (next != null) next.collapse(false);
 			}
 		});
-		collapse(true);
-		setVisibility(View.GONE);
+
 
 	}
-
+	
 	public TextTwoUp getHead() {
 		return head;
 	}
@@ -58,7 +61,8 @@ public class ERGCollapsePanel<T extends Enum<T>> extends LinearLayout implements
 	
 	public ERGCollapsePanel<T> collapse(boolean collapsed) {
 		setVisibility(View.VISIBLE);
-		body.setVisibility(collapsed? View.GONE : View.VISIBLE);
+		if (body != null) body.setVisibility(collapsed? View.GONE : View.VISIBLE);
+		if (collapsed && next != null) next.collapse(false);
 		return this;
 	}
 	
