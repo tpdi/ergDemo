@@ -3,70 +3,107 @@ package org.diffenbach.enumradiogroup;
 import java.util.Calendar;
 
 import org.diffenbach.android.widgets.EnumRadioGroup;
+import org.diffenbach.android.widgets.EnumRadioGroup.OnCheckedChangeListener;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.Button;
 
-public class MedicationCollapsePanel 
-	extends CollapsePanel<MedicationTimestamp, TextTwoUp, MedicationTimestampCollapsePanel> {
+public class MedicationCollapsePanel extends
+		CollapsePanel<MedicationTimestamp, TextTwoUp, MedicationCollapsePanel.MedicationTimestampCollapsePanel> {
 
+	private MedicationTimestamp medicationTimestamp;
+	
 	private static TextTwoUp makeTextTwoUp(Context context, Medication medication) {
-		TextTwoUp ret = new TextTwoUp(context);
-		ret.getFirst().setText("Did you take your " + medication.getName());
-		return ret;
+		return SymptomUtils.makeTextTwoUp(context, "Did you take your " + medication.getName());
 	}
-	
-	private static EnumRadioGroup<Polar> makeNoYes(Context context) {
-		return new EnumRadioGroup<Polar>(context, Polar.NO, R.array.agreed_without_no);
-	}
-	
-	private static MedicationTimestampCollapsePanel makeMedicationTimestampCollapsePanel(
-			Context context, MedicationTimestamp medicationTimestamp) {
-		Button b = new Button(context);
-		b.setText("Click here to enter when you took it");
-		return new MedicationTimestampCollapsePanel(
-				context, medicationTimestamp, makeNoYes(context), b, null);
-	}
-	
+
 	public MedicationCollapsePanel(Context context, Medication medication, Collapsable next) {
-		super(context, makeTextTwoUp(context, medication), 
-				makeMedicationTimestampCollapsePanel(context, new MedicationTimestamp(medication)), next);
-		
-		// ugh
-		getBody().setNext(this);
-	}
-	
-	public MedicationCollapsePanel(Context context, Medication medication, MedicationTimestampCollapsePanel mdtcp, Collapsable next) {
-		super(context, makeTextTwoUp(context, medication), mdtcp, next);
-		getBody().setNext(this);
-		// do  not call setValue here! .setValue(new MedicationTimestamp(medication));
-		
+		super(context, makeTextTwoUp(context, medication), new MedicationTimestampCollapsePanel(context,
+				new MedicationTimestamp(medication), null), next);
+		getBody().setParent(this);
+
 	}
 
 	@Override
 	public MedicationTimestamp getResult() {
-		return getBody().getResult();
+		return medicationTimestamp;
 	}
 
 	@Override
 	public CollapsePanel<MedicationTimestamp, TextTwoUp, MedicationTimestampCollapsePanel> setValue(
 			MedicationTimestamp value) {
-		getBody().setValue(value);
+		medicationTimestamp = value;
 		return this;
 	}
 
-	@Override 
+	@Override
 	protected void onCollapse(boolean collapsed) {
 		if (collapsed) {
 			String s = getBody().getHead().getCheckedValue().toString();
-			if(getBody().getHead().getCheckedValue() == Polar.YES){
+			if (getBody().getHead().getCheckedValue() == Polar.YES) {
 				Calendar ts = getResult().getTimestamp();
-				if(ts != null)
+				if (ts != null)
 					s += " at " + String.format("%tR %tD", ts, ts);
 			}
 			getHead().getSecond().setText(s);
 		}
 	}
 
+	static class MedicationTimestampCollapsePanel extends CollapsePanelBase<Polar, Polar, EnumRadioGroup<Polar>, Button> {
+
+		private MedicationTimestamp medicationTimestamp;
+		private MedicationCollapsePanel parent;
+
+		public MedicationTimestampCollapsePanel(Context context, MedicationTimestamp pmedicationTimestamp,
+				final Collapsable next) {
+			super(context, SymptomUtils.makeNoYes(context), SymptomUtils.makeDatePickerButton(context), next);
+			this.medicationTimestamp = pmedicationTimestamp;
+
+			getHead().setOnCheckedChangeListener(new OnCheckedChangeListener<Polar>() {
+
+				@Override
+				public void onCheckedChanged(EnumRadioGroup<Polar> group, Polar currentValue, int checkedId) {
+					if (currentValue == Polar.NO) {
+						collapse(true);
+						// next is really parent -- we want to collapse
+						// the parent
+						parent.collapse(true);
+					} else {
+						collapse(false);
+					}
+				}
+			});
+
+			getBody().setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					medicationTimestamp.setTimestamp(Calendar.getInstance());
+					parent.collapse(true);
+				}
+			});
+
+		}
+
+
+		public void setParent(MedicationCollapsePanel parent) {
+			this.parent = parent;
+		}
+
+
+		@Override
+		public CollapsePanelBase<Polar, Polar, EnumRadioGroup<Polar>, Button> setValue(Polar value) {
+			getHead().check(value);
+			return this;
+		}
+
+
+		@Override
+		public Polar getResult() {
+			return getHead().getCheckedValue();
+		}
+
+	}
 
 }

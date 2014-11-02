@@ -56,13 +56,6 @@ public class CollapseActivity extends Activity {
 						R.array.agreed_without_no),
 						
 			new MedicationCollapsePanel(this, medication, 
-						
-			new MedicationTimestampCollapsePanel(this, new MedicationTimestamp(medication),
-					new EnumRadioGroup<Polar>(
-						this, 							
-						Polar.UNKNOWN, 						
-						R.array.noyes).filter(EnumRadioGroup.includeAllBut(Polar.UNKNOWN)), 
-						new Button(this), null),
 					
 			new ERG2CollapsePanel<Pie>(this, "What pie is your favorite", 
 				 new EnumRadioGroup<Pie>(
