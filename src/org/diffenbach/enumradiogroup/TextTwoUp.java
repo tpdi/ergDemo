@@ -13,9 +13,9 @@ public class TextTwoUp extends LinearLayout {
 	
 	public TextTwoUp(Context context) {
 		super(context);
-		setOrientation(LinearLayout.HORIZONTAL);
+		setOrientation(LinearLayout.VERTICAL);
 		setBackgroundColor(Color.LTGRAY);
-		setLayoutParams( new LayoutParams(LayoutParams.MATCH_PARENT, 120));
+		setLayoutParams( new LayoutParams(LayoutParams.MATCH_PARENT, 160));
 		setPadding(15, 15, 15, 15);
 		
 		addView(first = makeFirst(context));
@@ -32,7 +32,7 @@ public class TextTwoUp extends LinearLayout {
 	
 	private TextView makeFirst(Context context) {
 		TextView ret = new TextView(context);
-		ret.setTextSize(20);
+		ret.setTextSize(18);
 		return ret;
 	}
 	
@@ -45,6 +45,8 @@ public class TextTwoUp extends LinearLayout {
 		params.gravity = Gravity.RIGHT;
 		
 		ret.setLayoutParams(params);
+		ret.setTextColor(Color.BLUE);
+		ret.setTextSize(14);
 		return ret;
-	}
+	} 
 }
