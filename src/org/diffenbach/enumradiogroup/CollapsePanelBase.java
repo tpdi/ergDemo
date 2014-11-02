@@ -1,11 +1,12 @@
 package org.diffenbach.enumradiogroup;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public abstract class CollapsePanelBase<TR, T, H extends View, B extends View> 
+public abstract class CollapsePanelBase<H extends View, B extends View> 
 		extends LinearLayout implements Collapsable {
 	
 	private final H head;
@@ -34,16 +35,12 @@ public abstract class CollapsePanelBase<TR, T, H extends View, B extends View>
 		return next;
 	}
 	
-	protected CollapsePanelBase<TR, T, H, B> setNext(Collapsable n) {
+	protected CollapsePanelBase<H, B> setNext(Collapsable n) {
 		next = n;
 		return this;
 	}
-
-	public abstract TR getResult();
 	
-	public abstract CollapsePanelBase<TR, T, H, B> setValue(T value);
-	
-	public CollapsePanelBase<TR, T, H, B> collapse(boolean collapsed) {
+	public CollapsePanelBase<H, B> collapse(boolean collapsed) {
 		onCollapse(collapsed);
 		setVisibility(View.VISIBLE);
 		body.setVisibility(collapsed? View.GONE : View.VISIBLE);
@@ -62,6 +59,16 @@ public abstract class CollapsePanelBase<TR, T, H extends View, B extends View>
 	public View addAllTo(ViewGroup parent) {
 		parent.addView(this);
 		return next != null ? next.addAllTo(parent) : parent;
+	}
+	
+	@Override
+	public void saveTo(Bundle bundle) {
+		if (next != null) next.saveTo(bundle);
+	}
+
+	@Override
+	public void restoreFrom(Bundle bundle) {
+		if (next != null) next.restoreFrom(bundle);
 	}
 
 }

@@ -42,5 +42,22 @@
         <item >No</item>
         <item >Yes</item>
     </string-array>
+    
+    <string name="question1">How bad is your mouth pain/sore throat?</string>
+    <string name="question2">Does your pain stop you from eating/drinking?</string>
+    
+    <string-array name="painlevel">
+        <item ></item>
+        <item >Well controlled</item>
+        <item >Moderate</item>
+        <item >Severe</item>
+    </string-array>
+    
+    <string-array name="eatinginability">
+        <item ></item>
+        <item >No</item>
+        <item >Some</item>
+        <item >I can\'t eat</item>
+    </string-array>
 
 </resources>

@@ -4,6 +4,7 @@ import org.diffenbach.android.widgets.EnumRadioGroup;
 import org.diffenbach.android.widgets.EnumRadioGroup.OnCheckedChangeListener;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -82,6 +83,18 @@ public class ERGCollapsePanel<T extends Enum<T>> extends LinearLayout implements
 	public View addAllTo(ViewGroup parent) {
 		parent.addView(this);
 		return next != null ? next.addAllTo(parent) : parent;
+	}
+
+	@Override
+	public void saveTo(Bundle bundle) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void restoreFrom(Bundle bundle) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

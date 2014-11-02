@@ -1,5 +1,7 @@
 package org.diffenbach.enumradiogroup;
 
+import java.util.Calendar;
+
 import org.diffenbach.android.utils.ViewUtils;
 import org.diffenbach.android.widgets.EnumRadioGroup.DisplayPredicate;
 import org.diffenbach.android.widgets.multilistener.EnumRadioGroup;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 //import android.widget.LinearLayout;
 // for most EnumRadioGroups in this file, we'll be using multilisteners
@@ -42,39 +45,42 @@ public class CollapseActivity extends Activity {
 	DisplayPredicate<Pie>[] pieFilters;
 	int pieFilterOffset = 1;
 	
+	ERG2CollapsePanel<PainLevel> checkinQuestions;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Medication medication = new Medication("Morphine");
+		Medication medication = new Medication(1, "Morphine");
 		 
-		ERG2CollapsePanel<Agreed> cp = 
-			new ERG2CollapsePanel<Agreed>(this, "Do you agree?", 
-				new EnumRadioGroup<Agreed>(
-						this, 							
-						Agreed.NO, 						
-						R.array.agreed_without_no),
-						
-			new MedicationCollapsePanel(this, medication, 
-					
-			new ERG2CollapsePanel<Pie>(this, "What pie is your favorite", 
-				 new EnumRadioGroup<Pie>(
-						 this,							// context
-						 Pie.POTATO,                    // the default button we clear to
-						 R.array.pie, 					// a list of localized names for the buttons
-						 org.diffenbach.android.widgets.R.layout.wrapped_radio_button),
+		checkinQuestions = 
+			new ERG2CollapsePanel<PainLevel>(this, R.string.question1, 
+					SymptomUtils.makeEnumRadioGroup(this, PainLevel.UNKNOWN, R.array.painlevel),
 			
-			new ERG2CollapsePanel<Pet>(this, "What kind of pets do you have", 
-				new EnumRadioGroup<Pet>(this, Pet.NONE, R.array.pet, 
-							R.layout.wrapped_radio_button),
+			new MedicationCollapsePanel(this, medication, 
+			new MedicationCollapsePanel(this, new Medication(2, "Cyanide"), 
+					
+			new ERG2CollapsePanel<EatingInability>(this, R.string.question2, 
+					SymptomUtils.makeEnumRadioGroup(this, EatingInability.UNKNOWN, R.array.eatinginability),
+			
 			null))));
 		
-			
-			setContentView(cp.collapse(false).addAllTo(
-							ViewUtils.setOrientation(LinearLayout.VERTICAL, new LinearLayout(this))));
-			
-
-			
+		ScrollView cv = new ScrollView(this);
+		cv.addView(
+				checkinQuestions.collapse(false).addAllTo(
+						ViewUtils.setOrientation(LinearLayout.VERTICAL, new LinearLayout(this))));
+		
+		setContentView(cv);
+		if (savedInstanceState != null) {
+			checkinQuestions.restoreFrom(savedInstanceState);
+		}
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		checkinQuestions.saveTo(outState);
 		
 	}
 

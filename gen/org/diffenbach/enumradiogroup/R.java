@@ -11,7 +11,9 @@ public final class R {
     public static final class array {
         public static final int agreed=0x7f070000;
         public static final int agreed_without_no=0x7f070001;
+        public static final int eatinginability=0x7f070007;
         public static final int noyes=0x7f070005;
+        public static final int painlevel=0x7f070006;
         public static final int pet=0x7f070004;
         public static final int pie=0x7f070002;
         public static final int sex=0x7f070003;
@@ -102,6 +104,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int dummy=0x7f050001;
         public static final int hello_world=0x7f050003;
         public static final int pielabel=0x7f050004;
+        public static final int question1=0x7f050006;
+        public static final int question2=0x7f050007;
         public static final int sexlabel=0x7f050005;
     }
     public static final class style {

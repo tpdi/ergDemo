@@ -3,18 +3,16 @@ package org.diffenbach.enumradiogroup;
 import org.diffenbach.android.widgets.EnumRadioGroup;
 
 import android.content.Context;
+import android.os.Bundle;
 
-public class ERG2CollapsePanel<T extends Enum<T>> 
-	extends CollapsePanel<T, TextTwoUp, EnumRadioGroup<T>> {
-
-	private static TextTwoUp makeTextTwoUp(Context context, String question) {
-		TextTwoUp ret = new TextTwoUp(context);
-		ret.getFirst().setText(question);
-		return ret;
-	}
+public class ERG2CollapsePanel<T extends Enum<T>> extends CollapsePanel<TextTwoUp, EnumRadioGroup<T>> {
 	
-	public ERG2CollapsePanel(Context context, String pquestion, EnumRadioGroup<T> answers, Collapsable next) {
-		super(context, makeTextTwoUp(context, pquestion), answers, next);
+	private final int questionId;
+
+	public ERG2CollapsePanel(Context context, int questionId, EnumRadioGroup<T> answers, Collapsable next) {
+		super(context, SymptomUtils.makeTextTwoUp(context, questionId), answers, next);
+		
+		this.questionId = questionId;
 		
 		getBody().setOnCheckedChangeListener( new EnumRadioGroup.OnCheckedChangeListener<T>(){
 			@Override
@@ -25,15 +23,21 @@ public class ERG2CollapsePanel<T extends Enum<T>>
 		});
 	}
 
+	private String key() {
+		return getClass().getName() + questionId;
+	}
+	
 	@Override
-	public T getResult() {
-		return getBody().getCheckedValue();
+	public void saveTo(Bundle bundle) {
+		SymptomUtils.saveTo(bundle, key(), getBody());
+		super.saveTo(bundle);
+		
 	}
 
 	@Override
-	public CollapsePanel<T, TextTwoUp, EnumRadioGroup<T>> setValue(T value) {
-		getBody().check(value);
-		return this;
+	public void restoreFrom(Bundle bundle) {
+		SymptomUtils.restoreFrom(bundle, key(), getBody());
+		super.restoreFrom(bundle);
 	}
 
 }

@@ -1,11 +1,25 @@
 package org.diffenbach.enumradiogroup;
 
 public class Medication {
-	private final String name;
+	private int id;
+	private String name;
 
-	public Medication(String name) {
-		super();
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Medication(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {

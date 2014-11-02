@@ -15,7 +15,7 @@ public class TextTwoUp extends LinearLayout {
 		super(context);
 		setOrientation(LinearLayout.VERTICAL);
 		setBackgroundColor(getResources().getColor(android.R.color.background_light));
-		setLayoutParams( new LayoutParams(LayoutParams.MATCH_PARENT, 160));
+		setLayoutParams( new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		setPadding(15, 15, 15, 15);
 		
 		addView(first = makeFirst(context));
