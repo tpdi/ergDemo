@@ -8,7 +8,7 @@ import android.content.Context;
 import android.widget.Button;
 
 public class MedicationCollapsePanel 
-	extends CollapsePanel<MedicationTimestamp, MedicationTimestamp, TextTwoUp, MedicationTimestampCollapsePanel> {
+	extends CollapsePanel<MedicationTimestamp, TextTwoUp, MedicationTimestampCollapsePanel> {
 
 	private static TextTwoUp makeTextTwoUp(Context context, Medication medication) {
 		TextTwoUp ret = new TextTwoUp(context);
@@ -49,7 +49,7 @@ public class MedicationCollapsePanel
 	}
 
 	@Override
-	public CollapsePanel<MedicationTimestamp, MedicationTimestamp, TextTwoUp, MedicationTimestampCollapsePanel> setValue(
+	public CollapsePanel<MedicationTimestamp, TextTwoUp, MedicationTimestampCollapsePanel> setValue(
 			MedicationTimestamp value) {
 		getBody().setValue(value);
 		return this;

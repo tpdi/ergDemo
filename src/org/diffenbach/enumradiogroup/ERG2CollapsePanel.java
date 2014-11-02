@@ -5,7 +5,7 @@ import org.diffenbach.android.widgets.EnumRadioGroup;
 import android.content.Context;
 
 public class ERG2CollapsePanel<T extends Enum<T>> 
-	extends CollapsePanel<T, T, TextTwoUp, EnumRadioGroup<T>> {
+	extends CollapsePanel<T, TextTwoUp, EnumRadioGroup<T>> {
 
 	private static TextTwoUp makeTextTwoUp(Context context, String question) {
 		TextTwoUp ret = new TextTwoUp(context);
@@ -31,7 +31,7 @@ public class ERG2CollapsePanel<T extends Enum<T>>
 	}
 
 	@Override
-	public CollapsePanel<T, T, TextTwoUp, EnumRadioGroup<T>> setValue(T value) {
+	public CollapsePanel<T, TextTwoUp, EnumRadioGroup<T>> setValue(T value) {
 		getBody().check(value);
 		return this;
 	}

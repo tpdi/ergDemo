@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MedicationTimestampCollapsePanel 
-	extends CollapsePanel<MedicationTimestamp, MedicationTimestamp, EnumRadioGroup<Polar>, Button>{
+	extends CollapsePanelBase<MedicationTimestamp, MedicationTimestamp, EnumRadioGroup<Polar>, Button>{
 
 	private MedicationTimestamp medicationTimestamp;
 	
@@ -50,7 +50,7 @@ public class MedicationTimestampCollapsePanel
 	}
 
 	@Override
-	public CollapsePanel<MedicationTimestamp, MedicationTimestamp, EnumRadioGroup<Polar>, Button> setValue(
+	public CollapsePanelBase<MedicationTimestamp, MedicationTimestamp, EnumRadioGroup<Polar>, Button> setValue(
 			MedicationTimestamp value) {
 		if (value.getTimestamp() == null) {
 			getHead().check(value.getTimestamp() == null ? Polar.NO : Polar.YES);
