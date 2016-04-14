@@ -24,8 +24,11 @@ public final class R {
 	}
 	public static final class layout {
 		public static final int horizontal_radio_button = 0x7f030001;
-		public static final int vertical_radio_button = 0x7f030003;
-		public static final int wrapped_radio_button = 0x7f030004;
+		public static final int horizontal_radio_button_clickable_when_checked = 0x7f030002;
+		public static final int vertical_radio_button = 0x7f030004;
+		public static final int vertical_radio_button_clickable_when_checked = 0x7f030005;
+		public static final int wrapped_radio_button = 0x7f030006;
+		public static final int wrapped_radio_button_clickable_when_checked = 0x7f030007;
 	}
 	public static final class string {
 		public static final int app_name = 0x7f050000;
